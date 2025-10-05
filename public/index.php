@@ -196,6 +196,22 @@ $username = $_SESSION['username'] ?? 'Benutzer';
                                 <i class="fa-solid fa-sign-out-alt mr-2"></i>
                                 Abmelden
                             </a>
+                            
+                            <!-- Version Info -->
+                            <div id="versionInfo" class="version-info">
+                                <div class="version-current">
+                                    <span id="currentVersion" class="version-number">Laden...</span>
+                                </div>
+                                <div id="updateNotification" class="update-notification hidden">
+                                    <i class="fa-solid fa-exclamation-circle update-icon"></i>
+                                    <span class="update-text">
+                                        Update verfügbar: 
+                                        <a id="updateLink" href="#" target="_blank" class="update-link">
+                                            <span id="latestVersion">-</span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

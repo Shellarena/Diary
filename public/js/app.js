@@ -1576,3 +1576,91 @@ function initMusicInfoBubble() {
         });
     }
 }
+
+// Version Management
+class VersionManager {
+    constructor() {
+        this.currentVersionEl = document.getElementById('currentVersion');
+        this.updateNotificationEl = document.getElementById('updateNotification');
+        this.updateLinkEl = document.getElementById('updateLink');
+        this.latestVersionEl = document.getElementById('latestVersion');
+        
+        this.init();
+    }
+    
+    async init() {
+        try {
+            await this.checkVersion();
+        } catch (error) {
+            console.warn('Version check failed:', error);
+            this.handleError('Version check initialization failed');
+        }
+    }
+    
+    async checkVersion() {
+        try {
+            const response = await fetch('/php/version_manager.php?action=check_version');
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            
+            // Display current version
+            if (this.currentVersionEl) {
+                this.currentVersionEl.textContent = `v${data.currentVersion}`;
+            }
+            
+            // Handle update notification
+            if (data.hasUpdate && data.latestVersion) {
+                this.showUpdateNotification(data.latestVersion, data.updateUrl);
+            } else if (data.error) {
+                console.warn('Version check API returned error:', data.error);
+                this.handleError(data.error);
+            }
+            
+        } catch (error) {
+            console.warn('Version check network error:', error);
+            this.handleError('Network error during version check');
+        }
+    }
+    
+    showUpdateNotification(latestVersion, updateUrl) {
+        if (this.updateNotificationEl && this.latestVersionEl && this.updateLinkEl) {
+            this.latestVersionEl.textContent = `v${latestVersion}`;
+            
+            if (updateUrl) {
+                this.updateLinkEl.href = updateUrl;
+            } else {
+                this.updateLinkEl.href = 'https://github.com/Shellarena/Diary/releases';
+            }
+            
+            this.updateNotificationEl.classList.remove('hidden');
+        }
+    }
+    
+    handleError(message) {
+        // Only log errors to console, don't show in UI
+        console.warn('Version Manager:', message);
+        
+        // Show current version as fallback if loading failed
+        if (this.currentVersionEl && this.currentVersionEl.textContent === 'Laden...') {
+            this.currentVersionEl.textContent = 'v1.0.0';
+        }
+    }
+    
+    hideUpdateNotification() {
+        if (this.updateNotificationEl) {
+            this.updateNotificationEl.classList.add('hidden');
+        }
+    }
+}
+
+// Initialize version manager when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Delay version check slightly to not interfere with main app loading
+    setTimeout(() => {
+        new VersionManager();
+    }, 1000);
+});

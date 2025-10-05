@@ -303,6 +303,27 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+/* Version Info Light Theme Styles */
+.version-info {
+    border-top-color: rgba(0, 0, 0, 0.05);
+}
+.version-number {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+.update-notification {
+    background: rgba(255, 193, 7, 0.04);
+    border-color: rgba(245, 127, 23, 0.2);
+}
+.update-icon {
+    color: #f57f17;
+    opacity: 0.6;
+}
+.update-link {
+    color: #f57f17;
+    opacity: 0.7;
+}
 .logout-btn:hover {
     background: #dc2626;
     transform: translateY(-1px);
