@@ -1,0 +1,57 @@
+name: Auto Release
+
+on:
+  push:
+    branches: [ main, master ]
+    paths: [ 'version.json' ]
+
+jobs:
+  auto-release:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Read version from version.json
+      id: version
+      run: |
+        VERSION=$(cat version.json | jq -r '.version')
+        DESCRIPTION=$(cat version.json | jq -r '.description')
+        echo "version=v$VERSION" >> $GITHUB_OUTPUT
+        echo "description=$DESCRIPTION" >> $GITHUB_OUTPUT
+        echo "Version: $VERSION"
+        echo "Description: $DESCRIPTION"
+    
+    - name: Check if tag exists
+      id: check_tag
+      run: |
+        if git rev-parse ${{ steps.version.outputs.version }} >/dev/null 2>&1; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+          echo "Tag ${{ steps.version.outputs.version }} already exists"
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+          echo "Tag ${{ steps.version.outputs.version }} does not exist"
+        fi
+    
+    - name: Create Release
+      if: steps.check_tag.outputs.exists == 'false'
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.version }}
+        release_name: Release ${{ steps.version.outputs.version }}
+        body: |
+          ## ${{ steps.version.outputs.description }}
+          
+          **Changelog:**
+          - Automatisches Release basierend auf version.json
+          - Version: ${{ steps.version.outputs.version }}
+          
+          **Download:**
+          Lade den neuesten Code herunter oder clone das Repository.
+        draft: false
+        prerelease: false

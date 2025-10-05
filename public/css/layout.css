@@ -219,6 +219,61 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+/* Version Info Styles */
+.version-info {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    font-size: 10px;
+}
+.version-current {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 4px;
+    gap: 4px;
+}
+.version-number {
+    font-weight: 400;
+    opacity: 0.6;
+    font-size: 12px;
+}
+.update-notification {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 3px 6px;
+    border-radius: 3px;
+    background: rgba(255, 193, 7, 0.06);
+    border: 1px solid rgba(255, 193, 7, 0.15);
+    margin-top: 4px;
+}
+.update-notification.hidden {
+    display: none;
+}
+.update-icon {
+    color: #ff9800;
+    font-size: 8px;
+    opacity: 0.7;
+}
+.update-text {
+    font-size: 8px;
+    line-height: 1.2;
+    opacity: 0.8;
+    text-align: center;
+}
+.update-link {
+    color: #ff9800;
+    text-decoration: none;
+    font-weight: 400;
+    opacity: 0.8;
+}
+.update-link:hover {
+    text-decoration: underline;
+    opacity: 1;
+}
 .main-content {
     flex: 1;
     display: flex;
