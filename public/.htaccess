@@ -1,0 +1,32 @@
+# Schutz vor Suchmaschinen-Indexierung
+<IfModule mod_headers.c>
+    # X-Robots-Tag Header - verhindert Indexierung
+    Header always set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex, notranslate"
+    
+    # Zusätzliche Privacy-Header
+    Header always set Referrer-Policy "no-referrer"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+</IfModule>
+
+# Blockiere direkten Zugriff auf sensible Dateien
+<FilesMatch "\.(txt|log|sql|bak|backup|old|orig)$">
+    Order deny,allow
+    Deny from all
+</FilesMatch>
+
+# Verstecke Verzeichnis-Listings
+Options -Indexes
+
+# Verhindere Zugriff auf .htaccess selbst
+<Files ".htaccess">
+    Order deny,allow
+    Deny from all
+</Files>
+
+# Blockiere robots.txt für Crawler (Paradox, aber effektiv)
+<Files "robots.txt">
+    <IfModule mod_headers.c>
+        Header always set X-Robots-Tag "noindex, nofollow"
+    </IfModule>
+</Files>
